@@ -22,10 +22,10 @@ P2 = [P2orig'; ones(1,n)];
 F = EightPointsAlgorithmN(P1, P2);
 
 % Visualize the epipolar lines
-%visualizeEpipolarLines(img1, img2, F, P1orig, P2orig, 100);
-%pause 
+visualizeEpipolarLines(img1, img2, F, P1orig, P2orig, 100);
+pause 
 %close all
-%visualizeEpipolarLines(img1, img2, F, [], [], 110);
+visualizeEpipolarLines(img1, img2, F, [], [], 110);
 
 
 %%
@@ -95,8 +95,8 @@ clc, close all, clear all;
 addpath('../ImageMatching/'); % change the path here if needed
 
 % Load images
-img1 = rgb2gray(imread('OtherPairs/Img6.jpeg'));
-img2 = rgb2gray(imread('OtherPairs/Img5.jpeg'));
+img1 = rgb2gray(imread('OtherPairs/Img5.jpeg'));
+img2 = rgb2gray(imread('OtherPairs/Img6.jpeg'));
 
 img1 = imresize(img1, 0.5);
 img2 = imresize(img2, 0.5);
