@@ -28,6 +28,8 @@ function [F] = EightPointsAlgorithm(P1,P2)
 
     % reshape riempe per colonne
     F = reshape(last_col_V,3,3);
+
+    % quindi facciamo la trasposta per ottenerla in righe
     F = F';
 
     [U, D, V]=svd(F);

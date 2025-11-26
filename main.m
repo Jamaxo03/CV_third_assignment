@@ -1,4 +1,8 @@
+%% 
 clear; clc; close all;
+
+%%
+
 %Part 1: estimation of the fundamental matrix with manually selected correspondences
 
 % Load images
@@ -27,14 +31,11 @@ pause
 %close all
 visualizeEpipolarLines(img1, img2, F, [], [], 110);
 
-
-%%
-%CHECK EPIPOLAR CONTRAINT
+%% CHECK EPIPOLAR CONTRAINT
 verified = check_epipolar_constraint(F, P1, P2);
 display("VERIFY EPIPOLAR CONDITION: ");
 display(verified);
 
-%%
 %EPIPOLES
 [e1,e2] = epipoles(F);
 % Display the computed epipoles
@@ -43,17 +44,22 @@ disp(e1);
 disp("Epipole 2: ");
 disp(e2);
 
-
-%%
 %CHECKING EPIPOLAR 
-ep_verified = check_epipole(F',P2,e2);
+ep_verified = check_epipole(F,e1);
 display("VERIFY EPIPOLE CONDITION: ");
-display(ep_verified);
+display(ep_verified); %0
 
+ep_verified = check_epipole(F,e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
 
+ep_verified = check_epipole(F',e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
 
-
-
+ep_verified = check_epipole(F',e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %0
 
 %% Part 2: assessing the use of RANSAC 
 clc, clear all;
@@ -83,20 +89,57 @@ P1 = [P1orign'; ones(1,n)];
 P2 = [P2orign'; ones(1,n)];
 
 % Estimate the fundamental matrix with RANSAC
+%prende subset di punti falsi e veri
+%fa degli INSIEMI di coppie e si calcola ogni F.
+% CALCOLA UNO SCORE E RESTITUISCE LA F MIGLIORE TRA LE COPPIE DI PUNTI
+
 th = 10^(-2);
 [F, consensus, outliers] = ransacF(P1, P2, th);
 
 % Visualize the epipolar lines
 visualizeEpipolarLines(img1, img2, F, P1orig, P2orig, 120);
 
+%%  check 
+%CHECK EPIPOLAR CONTRAINT
+verified = check_epipolar_constraint(F, P1, P2);
+display("VERIFY EPIPOLAR CONDITION: ");
+display(verified);
+
+%EPIPOLES
+[e1,e2] = epipoles(F);
+% Display the computed epipoles
+disp("Epipole 1: ");
+disp(e1);
+disp("Epipole 2: ");
+disp(e2);
+
+%CHECKING EPIPOLAR 
+ep_verified = check_epipole(F,e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %0
+
+ep_verified = check_epipole(F,e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
+
+ep_verified = check_epipole(F',e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
+
+ep_verified = check_epipole(F',e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %0
+
+
 
 %% Part 3: using image matching+ransac
 clc, close all, clear all;
-addpath('../ImageMatching/'); % change the path here if needed
+%addpath('../ImageMatching/'); % change the path here if needed
+addpath('../../Lab7/Material/ImageMatching/');
 
 % Load images
-img1 = rgb2gray(imread('OtherPairs/Img5.jpeg'));
-img2 = rgb2gray(imread('OtherPairs/Img6.jpeg'));
+img1 = rgb2gray(imread('OtherPairs/foto2.jpeg'));
+img2 = rgb2gray(imread('OtherPairs/foto3.jpeg'));
 
 img1 = imresize(img1, 0.5);
 img2 = imresize(img2, 0.5);
@@ -116,3 +159,35 @@ th = 10^(-2);
 
 % Visualize the epipolar lines
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
+
+
+%%  check 
+%CHECK EPIPOLAR CONTRAINT
+verified = check_epipolar_constraint(F, P1, P2);
+display("VERIFY EPIPOLAR CONDITION: ");
+display(verified);
+
+%EPIPOLES
+[e1,e2] = epipoles(F);
+% Display the computed epipoles
+disp("Epipole 1: ");
+disp(e1);
+disp("Epipole 2: ");
+disp(e2);
+
+%CHECKING EPIPOLAR 
+ep_verified = check_epipole(F,e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %0
+
+ep_verified = check_epipole(F,e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
+
+ep_verified = check_epipole(F',e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %1
+
+ep_verified = check_epipole(F',e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); %0
