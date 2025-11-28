@@ -6,30 +6,67 @@ clear; clc; close all;
 %Part 1: estimation of the fundamental matrix with manually selected correspondences
 
 % Load images
-img1 = imread('Rubik/Rubik1.pgm');
-img2 = imread('Rubik/Rubik2.pgm');
+img1 = imread('Mire/Mire1.pgm');
+img2 = imread('Mire/Mire2.pgm');
 
-% Load points
-P1orig = load('Rubik/Rubik1.points');
-P2orig = load('Rubik/Rubik2.points');
+% Load all points
+P1orig = load('Mire/Mire1.points');
+P2orig = load('Mire/Mire2.points');
 
-%P1orig = P1orig(1:10,:);
-%P2orig = P2orig(1:10,:);
 
-n = size(P1orig,1);
+ks = 8:size(P1orig,1);    
+numIter = length(ks);     
+F_list = cell(numIter,1); 
 
-% Add the third component to work in homogeneous coordinates
-P1 = [P1orig'; ones(1,n)];
-P2 = [P2orig'; ones(1,n)];
+for idx = 1:numIter
+    
+    % actual value of k
+    k = ks(idx);  
+    
+    % take first k points
+    P1 = P1orig(1:k, :);
+    P2 = P2orig(1:k, :);
+    
+    P1 = [P1'; ones(1,k)];
+    P2 = [P2'; ones(1,k)];
+    
+    % Compute F(k)
+    Fk = EightPointsAlgorithmN(P1, P2);
+    
+    % save
+    F_list{idx} = Fk;
 
-% Estimate the fundamental matrix
-F = EightPointsAlgorithmN(P1, P2);
+    % display
+    visualizeEpipolarLines(img1, img2, Fk, P1orig, P2orig, idx);
 
-% Visualize the epipolar lines
-visualizeEpipolarLines(img1, img2, F, P1orig, P2orig, 100);
-pause 
-%close all
-visualizeEpipolarLines(img1, img2, F, [], [], 110);
+    % calculate errors (geometrical distance between points and epipolar line)
+    errors = zeros(size(P1orig,1),1); 
+
+    for i=1:size(P1orig,1)
+        
+        p1 = [P1orig(i,:) 1]';
+        p2 = [P2orig(i,:) 1]';
+        
+        % calculate epipolar line
+        l2 = Fk * p1;
+        a = l2(1); b = l2(2); c = l2(3);
+    
+        % geometrical distance
+        errors(i) = abs(a*p2(1) + b*p2(2) + c) / sqrt(a^2 + b^2);
+    
+    end
+
+    % stats
+    mean_err = mean(errors);
+    max_err  = max(errors);
+    median_err = median(errors);
+    
+    fprintf("k = %d  -->  Median error = %.4f    Mean error = %.4f    Max error = %.4f\n", ...
+            k, median_err, mean_err, max_err);
+
+end
+
+visualizeEpipolarLines(img1, img2, Fk, [], [], idx+1);
 
 %% CHECK EPIPOLAR CONTRAINT
 verified = check_epipolar_constraint(F, P1, P2);
