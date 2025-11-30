@@ -8,11 +8,14 @@ clear; clc; close all;
 % Load images
 img1 = imread('Mire/Mire1.pgm');
 img2 = imread('Mire/Mire2.pgm');
+%img1 = imread('Rubik/Rubik1.pgm');
+%img2 = imread('Rubik/Rubik2.pgm');
 
 % Load all points
 P1orig = load('Mire/Mire1.points');
 P2orig = load('Mire/Mire2.points');
-
+%P1orig = load('Rubik/Rubik1.points');
+%P2orig = load('Rubik/Rubik2.points');
 
 ks = 8:size(P1orig,1);    
 numIter = length(ks);     
