@@ -4,7 +4,7 @@ function [verified] = check_epipolar_constraint(F,P1,P2)
 
 
     for i=1:n1
-        if(P2(:,i)'*F*P1(:,i) > 10^-2) % matlab è stronzo
+        if(P2(:,i)'*F*P1(:,i) > 10^-2) 
             verified = false;
             break
         end

@@ -108,16 +108,12 @@ display(ep_verified); %0
 clc, clear all;
 
 % Load images
-img1 = imread('Mire/Mire1.pgm');
-img2 = imread('Mire/Mire2.pgm');
-%img1 = imread('Rubik/Rubik1.pgm');
-%img2 = imread('Rubik/Rubik2.pgm');
+img1 = imread('Rubik/Rubik1.pgm');
+img2 = imread('Rubik/Rubik2.pgm');
 
-% Load all points
-P1orig = load('Mire/Mire1.points');
-P2orig = load('Mire/Mire2.points');
-%P1orig = load('Rubik/Rubik1.points');
-%P2orig = load('Rubik/Rubik2.points');
+% Load points
+P1orig = load('Rubik/Rubik1.points');
+P2orig = load('Rubik/Rubik2.points');
 
 
 
@@ -126,7 +122,7 @@ P1_init = P1orig;
 P2_init = P2orig
 
 % Add random points (to assess RANSAC)
-r = 15;%numero di coppie di punti randomici che aggiungo
+r = 11;%numero di coppie di punti randomici che aggiungo
 x1r = double(round(size(img1,1)*rand(r,1)));
 y1r = double(round(size(img1,2)*rand(r,1)));
 

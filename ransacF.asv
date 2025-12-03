@@ -37,7 +37,7 @@ function [bestF, consensus, outliers] = ransacF(P1, P2, th)
         ii = ii + 1;
     end 
 
-    % disp(sprintf("Best Inliers Percentage: %.2f %%", bestNInlier*100));
+    disp(sprintf("Best Inliers Percentage: %.2f", bes))
 
     if(bestNInlier < (8/N))
         disp('Number of inliers < 8, F is not reliable');
