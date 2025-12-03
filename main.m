@@ -17,6 +17,11 @@ P2orig = load('Mire/Mire2.points');
 %P1orig = load('Rubik/Rubik1.points');
 %P2orig = load('Rubik/Rubik2.points');
 
+
+
+
+%%
+
 ks = 8:size(P1orig,1);    
 numIter = length(ks);     
 F_list = cell(numIter,1); 
@@ -71,11 +76,17 @@ end
 
 visualizeEpipolarLines(img1, img2, Fk, [], [], idx+1);
 
-%% CHECK EPIPOLAR CONTRAINT
+%% 
+n = size(P1orig,1);
+P1 = [P1orig'; ones(1,n)];
+P2 = [P2orig'; ones(1,n)];
+%% CHECK EPIPOLAR CONTRAINT NOT NORMALIZED
 
-F = Fk;
-
-verified = check_epipolar_constraint(F, P1, P2);
+disp("---------------------");
+disp("NOT NORMALIZED POINTS");
+disp("---------------------");
+F = EightPointsAlgorithmN(P1, P2);
+[verified, res] = check_epipolar_constraint(F, P1, P2);
 display("VERIFY EPIPOLAR CONDITION: ");
 display(verified);
 
@@ -104,6 +115,44 @@ ep_verified = check_epipole(F',e2);
 display("VERIFY EPIPOLE CONDITION: ");
 display(ep_verified); %0
 
+
+%% CHECK EPIPOLAR CONTRAINT NORMALIZED
+F = EightPointsAlgorithmN(P1,P2);
+disp("---------------------");
+disp("NORMALIZED POINTS");
+disp("---------------------");
+[nP1, T1] = normalise2dpts(P1);
+[nP2, T2]= normalise2dpts(P2);
+
+[verified,res] = check_epipolar_constraint(F, nP1, nP2);
+display("VERIFY EPIPOLAR CONDITION: ");
+display(verified);
+
+%EPIPOLES
+[e1,e2] = epipoles(F);
+% Display the computed epipoles
+disp("Epipole 1: ");
+disp(e1);
+disp("Epipole 2: ");
+disp(e2);
+
+%CHECKING EPIPOLAR 
+ep_verified = check_epipole(F,e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); 
+
+ep_verified = check_epipole(F,e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); 
+
+ep_verified = check_epipole(F',e1);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); 
+
+ep_verified = check_epipole(F',e2);
+display("VERIFY EPIPOLE CONDITION: ");
+display(ep_verified); 
+
 %% Part 2: assessing the use of RANSAC 
 clc, clear all;
 
@@ -126,7 +175,7 @@ P1_init = P1orig;
 P2_init = P2orig
 
 % Add random points (to assess RANSAC)
-r = 15;%numero di coppie di punti randomici che aggiungo
+r = 16;%numero di coppie di punti randomici che aggiungo
 x1r = double(round(size(img1,1)*rand(r,1)));
 y1r = double(round(size(img1,2)*rand(r,1)));
 
@@ -139,8 +188,8 @@ P2orign = [P2orig; [x2r, y2r]];
 n = size(P1orign,1);
 
 % Add the third component to work in homogeneous coordinates
-P1 = [P1orign'; ones(1,n)];
-P2 = [P2orign'; ones(1,n)];
+P1_n = [P1orign'; ones(1,n)];
+P2_n = [P2orign'; ones(1,n)];
 
 % Estimate the fundamental matrix with RANSAC
 %prende subset di punti falsi e veri
@@ -148,9 +197,9 @@ P2 = [P2orign'; ones(1,n)];
 % CALCOLA UNO SCORE E RESTITUISCE LA F MIGLIORE TRA LE COPPIE DI PUNTI
 
 th = 10^(-2);
-[F, consensus, outliers] = ransacF(P1, P2, th);
-inlier_p = size(consensus,2)/size(P1,2);
-outlier_p = size(outliers,2)/size(P1, 2);
+[Fr, consensus, outliers] = ransacF(P1_n, P2_n, th);
+inlier_p = size(consensus,2)/size(P1_n,2);
+outlier_p = size(outliers,2)/size(P1_n, 2);
 disp(sprintf("Numbero of random point couples added to the data set: %d", r));
 disp(sprintf("Percentage of inlier points: %0.2f %%", inlier_p*100));
 disp(sprintf("Percentage of outlier points: %0.2f %%", outlier_p*100));
@@ -158,18 +207,41 @@ disp(sprintf("Percentage of outlier points: %0.2f %%", outlier_p*100));
 
 
 % Visualize the epipolar lines
-visualizeEpipolarLines(img1, img2, F, P1orig, P2orig, 120);
+visualizeEpipolarLines(img1, img2, Fr, P1orig, P2orig, 120);
 
 %%  check 
 %CHECK EPIPOLAR CONTRAINT
-verified = check_epipolar_constraint(F, P1, P2);
-display("VERIFY EPIPOLAR CONDITION: ");
+% need to run the previous section tho
+
+n = size(P1orig,1);
+P1 = [P1orig'; ones(1,n)];
+P2 = [P2orig'; ones(1,n)];
+
+disp("---------------------");
+disp("NOISY POINTS RANSAC");
+disp("---------------------");
+[verified,resn] = check_epipolar_constraint(Fr, P1_n, P2_n);
+display("VERIFY EPIPOLAR CONDITION : ");
 display(verified);
-n = size(P1_init,1);
-P1 = [P1_init'; ones(1,n)];
-P2 = [P2_init'; ones(1,n)];
-verified = check_epipolar_constraint(F, P1, P2);
-display("VERIFY EPIPOLAR CONDITION ON ORIGNAL POINTS: ");
+[verified,resn] = check_epipolar_constraint(Fr, P1, P2);
+display("VERIFY EPIPOLAR CONDITION : ");
+display(verified);
+
+disp("---------------------");
+disp("NOISY POINTS 8-POINTS");
+disp("---------------------");
+%take 8 random points from P1 and P1
+[~,nr] = size(P1_n);
+idx = randperm(nr, 8);
+rP1 = P1_n(:, idx);
+rP2 = P2_n(:, idx);
+F = EightPointsAlgorithmN(rP1, rP2);
+[verified,resn] = check_epipolar_constraint(F, rP1, rP2);
+display("VERIFY EPIPOLAR CONDITION : ");
+display(verified);
+F = EightPointsAlgorithmN(rP1, rP2);
+[verified,resn] = check_epipolar_constraint(F, P1, P2);
+display("VERIFY EPIPOLAR CONDITION : ");
 display(verified);
 
 %EPIPOLES
