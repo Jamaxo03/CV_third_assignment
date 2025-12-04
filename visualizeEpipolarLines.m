@@ -10,7 +10,7 @@ function [] = visualizeEpipolarLines(Im1, Im2, F, pt1, pt2, fig_idx)
 
 I = [Im1 Im2];
 
-figure(fig_idx), imshow(I), hold on;
+figure(fig_idx), imshow(I), title("POS, SVD, th=0.65, sigma=10"), hold on;
 
 if(size(pt1,1)==0 || size(pt2,1)==0)
 

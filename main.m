@@ -138,14 +138,14 @@ clc, close all, clear all;
 addpath('../../Lab7/Material/ImageMatching/');
 
 % Load images
-img1 = rgb2gray(imread('OtherPairs/foto2.jpeg'));
-img2 = rgb2gray(imread('OtherPairs/foto3.jpeg'));
+img1 = rgb2gray(imread('OtherPairs/robot1.jpeg'));
+img2 = rgb2gray(imread('OtherPairs/robot2.jpeg'));
 
 img1 = imresize(img1, 0.5);
 img2 = imresize(img2, 0.5);
 
 % extraction of keypoints and matching
-list = imageMatching(img1, img2, 'POSNCC', 0.65, 1, 100);
+list = imageMatching(img1, img2, 'POS', 0.85, 0, 10);
 
 n = size(list,1);
 
@@ -160,6 +160,100 @@ th = 10^(-2);
 % Visualize the epipolar lines
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
+%-------------------
+% img1 = rgb2gray(imread('OtherPairs/chiavi1.jpeg'));
+% img2 = rgb2gray(imread('OtherPairs/chiavi2.jpeg'));
+% 
+% img1 = imresize(img1, 0.5);
+% img2 = imresize(img2, 0.5);
+% 
+% % extraction of keypoints and matching
+% list = imageMatching(img1, img2, 'NCC', 0.85, 0, 100);
+% 
+% n = size(list,1);
+% 
+% % Add the third component to work in homogeneous coordinates
+% P1 = [list(:,2)'; list(:,1)'; ones(1,n)];
+% P2 = [list(:,4)'; list(:,3)'; ones(1,n)];
+% 
+% % Estimate the fundamental matrix with RANSAC
+% th = 10^(-2);
+% [F, consensus, outliers] = ransacF(P1, P2, th);
+% 
+% % Visualize the epipolar lines
+% visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
+% 
+% %-------------------
+% 
+% img1 = rgb2gray(imread('OtherPairs/foto1.jpeg'));
+% img2 = rgb2gray(imread('OtherPairs/foto2.jpeg'));
+% 
+% img1 = imresize(img1, 0.5);
+% img2 = imresize(img2, 0.5);
+% 
+% % extraction of keypoints and matching
+% list = imageMatching(img1, img2, 'POSNCC', 0.65, 1, 100);
+% 
+% n = size(list,1);
+% 
+% % Add the third component to work in homogeneous coordinates
+% P1 = [list(:,2)'; list(:,1)'; ones(1,n)];
+% P2 = [list(:,4)'; list(:,3)'; ones(1,n)];
+% 
+% % Estimate the fundamental matrix with RANSAC
+% th = 10^(-2);
+% [F, consensus, outliers] = ransacF(P1, P2, th);
+% 
+% % Visualize the epipolar lines
+% visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
+% 
+% %-------------------
+% 
+% img1 = rgb2gray(imread('OtherPairs/robot1.jpeg'));
+% img2 = rgb2gray(imread('OtherPairs/robot2.jpeg'));
+% 
+% img1 = imresize(img1, 0.5);
+% img2 = imresize(img2, 0.5);
+% 
+% % extraction of keypoints and matching
+% list = imageMatching(img1, img2, 'POSNCC', 0.65, 0, 10);
+% 
+% n = size(list,1);
+% 
+% % Add the third component to work in homogeneous coordinates
+% P1 = [list(:,2)'; list(:,1)'; ones(1,n)];
+% P2 = [list(:,4)'; list(:,3)'; ones(1,n)];
+% 
+% % Estimate the fundamental matrix with RANSAC
+% th = 10^(-2);
+% [F, consensus, outliers] = ransacF(P1, P2, th);
+% 
+% % Visualize the epipolar lines
+% visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
+% 
+% %-------------------
+% 
+% img1 = rgb2gray(imread('OtherPairs/chiavi1.jpeg'));
+% img2 = rgb2gray(imread('OtherPairs/chiavi2.jpeg'));
+% 
+% img1 = imresize(img1, 0.5);
+% img2 = imresize(img2, 0.5);
+% 
+% % extraction of keypoints and matching
+% list = imageMatching(img1, img2, 'POSNCC', 0.65, 1, 100);
+% 
+% n = size(list,1);
+% 
+% % Add the third component to work in homogeneous coordinates
+% P1 = [list(:,2)'; list(:,1)'; ones(1,n)];
+% P2 = [list(:,4)'; list(:,3)'; ones(1,n)];
+% 
+% % Estimate the fundamental matrix with RANSAC
+% th = 10^(-2);
+% [F, consensus, outliers] = ransacF(P1, P2, th);
+% 
+% % Visualize the epipolar lines
+% visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
 %%  check 
 %CHECK EPIPOLAR CONTRAINT
