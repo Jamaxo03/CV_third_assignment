@@ -7,7 +7,7 @@ function [verified] = check_epipole(F,e)
     %l'epipole deve stare nelle epipolar line di x per ogni x
     %e quindi il loro prodotto scalare deve dare zero (l*e =0)
 
-    if(abs(e'*F) >= 10^-9) 
+    if(norm(e'*F) >= 10^-9) 
         verified = false;
     end
 

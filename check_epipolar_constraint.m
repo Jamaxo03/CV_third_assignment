@@ -1,12 +1,12 @@
-function [verified] = check_epipolar_constraint(F,P1,P2)
+function [verified, res] = check_epipolar_constraint(F,P1,P2)
     verified = true;
     [~,n1] = size(P1);
-
+    res = zeros(1,n1);
 
     for i=1:n1
-        if(P2(:,i)'*F*P1(:,i) > 10^-2) % matlab è stronzo
+        res(i) = abs(P2(:,i)'*F*P1(:,i));
+        if(abs(P2(:,i)'*F*P1(:,i)) > 10^-2) 
             verified = false;
-            break
         end
     end
 
