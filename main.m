@@ -117,13 +117,12 @@ display(ep_verified); %0
 
 
 %% CHECK EPIPOLAR CONTRAINT NORMALIZED
-F = EightPointsAlgorithmN(P1,P2);
 disp("---------------------");
 disp("NORMALIZED POINTS");
 disp("---------------------");
 [nP1, T1] = normalise2dpts(P1);
 [nP2, T2]= normalise2dpts(P2);
-
+F = EightPointsAlgorithmN(P1,P2);
 [verified,res] = check_epipolar_constraint(F, nP1, nP2);
 display("VERIFY EPIPOLAR CONDITION: ");
 display(verified);
@@ -175,7 +174,7 @@ P1_init = P1orig;
 P2_init = P2orig
 
 % Add random points (to assess RANSAC)
-r = 16;%numero di coppie di punti randomici che aggiungo
+r = 1;%numero di coppie di punti randomici che aggiungo
 x1r = double(round(size(img1,1)*rand(r,1)));
 y1r = double(round(size(img1,2)*rand(r,1)));
 
@@ -200,7 +199,7 @@ th = 10^(-2);
 [Fr, consensus, outliers] = ransacF(P1_n, P2_n, th);
 inlier_p = size(consensus,2)/size(P1_n,2);
 outlier_p = size(outliers,2)/size(P1_n, 2);
-disp(sprintf("Numbero of random point couples added to the data set: %d", r));
+disp(sprintf("Number of random point couples added to the data set: %d", r));
 disp(sprintf("Percentage of inlier points: %0.2f %%", inlier_p*100));
 disp(sprintf("Percentage of outlier points: %0.2f %%", outlier_p*100));
 
