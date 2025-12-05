@@ -299,7 +299,9 @@ th = 10^(-2);
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
 %%
-%-------------------
+clc, close all, clear all;
+addpath('../../Lab7/Material/ImageMatching/');
+
 img1 = rgb2gray(imread('OtherPairs/chiavi1.jpeg'));
 img2 = rgb2gray(imread('OtherPairs/chiavi2.jpeg'));
 
@@ -323,7 +325,9 @@ th = 10^(-2);
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
 %%
-%-------------------
+clc, close all, clear all;
+addpath('../../Lab7/Material/ImageMatching/');
+
 
 img1 = rgb2gray(imread('OtherPairs/foto1.jpeg'));
 img2 = rgb2gray(imread('OtherPairs/foto2.jpeg'));
@@ -348,7 +352,9 @@ th = 10^(-2);
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
 %%
-%-------------------
+clc, close all, clear all;
+addpath('../../Lab7/Material/ImageMatching/');
+
 
 img1 = rgb2gray(imread('OtherPairs/robot1.jpeg'));
 img2 = rgb2gray(imread('OtherPairs/robot2.jpeg'));
@@ -373,7 +379,8 @@ th = 10^(-2);
 visualizeEpipolarLines(img1, img2, F, P1(1:2,:)', P2(1:2,:)', 130);
 
 %%
-%-------------------
+clc, close all, clear all;
+addpath('../../Lab7/Material/ImageMatching/');
 
 img1 = rgb2gray(imread('OtherPairs/chiavi1.jpeg'));
 img2 = rgb2gray(imread('OtherPairs/chiavi2.jpeg'));
